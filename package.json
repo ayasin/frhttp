@@ -1,0 +1,30 @@
+{
+  "private": true,
+  "name": "frexpress",
+  "version": "0.0.1",
+  "description": "Functional Reactive HTTP server for Node.js",
+  "main": "frexpress.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ayasin/frexpress.git"
+  },
+  "keywords": [
+    "frexpress",
+    "http",
+    "server"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ayasin/frexpress/issues"
+  },
+  "homepage": "https://github.com/ayasin/frexpress",
+  "dependencies": {
+    "baconjs": "~0.7.38",
+    "immutable": "~3.3.0",
+    "lodash": "~2.4.1"
+  }
+}
