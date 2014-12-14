@@ -1,9 +1,9 @@
 {
   "private": true,
-  "name": "frexpress",
+  "name": "frhttp",
   "version": "0.0.1",
   "description": "Functional Reactive HTTP server for Node.js",
-  "main": "frexpress.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
