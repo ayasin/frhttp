@@ -1,3 +1,4 @@
+'use strict';
 var FRHttp = require('./lib/frhttp.js');
 
 var server = FRHttp.createServer();
