@@ -6,7 +6,7 @@ FRHTTP
 > Edsger W. Dijkstra
 
 FRHTTP is an backend web framework designed to facilitate the development of functional reactive web services/sites.
-
+  
 Key benefits:
 * eliminates callback hell
 * easy to reason about
