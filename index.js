@@ -1,5 +1,6 @@
 'use strict';
 var FRHttp = require('./lib/frhttp.js');
+var http = require('http');
 
 var server = FRHttp.createServer();
 
@@ -12,3 +13,8 @@ server.GET('/api/client/:clientId/package/:package').onValue(
 		server.TAP_GET('/api/client/123').log();
 	}
 );
+/*
+http.createServer(function (req, res) {
+	server.findAndExecute(req, res);
+}).listen(8080);
+*/
