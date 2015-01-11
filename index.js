@@ -10,8 +10,20 @@ server.GET('/api/multiply/:first/:second').onValue(function (path) {
 				name: 'multiply',
 				enter: null,
 				exit: null,
-				params: ['request:url_vars'],
+				params: ['request:url_vars', 'factor'],
 				produces: ['mul'],
+				fn: function (produce, input) {
+					produce.value('mul', input['request:url_vars'].first * input['request:url_vars'].second * input.factor);
+					produce.done();
+				}
+			}
+		).inject({factor: 2}).on(
+			{
+				name: 'monkey_balls',
+				enter: null,
+				exit: null,
+				params: ['request:url_vars', 'monkey_ball'],
+				produces: ['mul_monkey'],
 				fn: function (produce, input) {
 					produce.value('mul', input['request:url_vars'].first * input['request:url_vars'].second);
 					produce.done();
@@ -28,22 +40,4 @@ server.GET('/api/multiply/:first/:second').onValue(function (path) {
 		);
 	});
 
-server.listen(8009);
-
-
-/*
-var Bacon = require('baconjs');
-
-var a = new Bacon.Bus();
-var b = new Bacon.Bus();
-
-var temp = Bacon.combineTemplate({
-	a : a,
-	b: a.sampledBy(b)
-}).endOnError().onValue(function() {console.log('I was called'); return 33;}).onError(function (e) { console.log(e); });
-
-a.push(15);
-b.push(13);
-a.end();
-b.error('there was a problem');
-*/
+server.listen(8001);
