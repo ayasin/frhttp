@@ -19,9 +19,9 @@ server.GET('/api/multiply/:first/:second').onValue(function (path) {
 		}
 	).inject({factor: 2}).inject({monkey: 'balls'}).render(
 		{
-			params: ['mul'],
+			params: ['mul', 'factor'],
 			fn: function(writer, input) {
-				writer.writeBody(input.mul);
+				writer.writeBody('factoring in (' + input.factor + '): ' + input.mul);
 			}
 		}
 	);
