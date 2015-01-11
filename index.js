@@ -21,8 +21,7 @@ server.GET('/api/multiply/:first/:second').onValue(function (path) {
 		{
 			params: ['mul'],
 			fn: function(writer, input) {
-				writer.write(input.mul);
-				writer.done();
+				writer.writeBody(input.mul);
 			}
 		}
 	);
@@ -51,7 +50,9 @@ server.GET('/api/divide/:first/:second').onValue(function (path) {
 		{
 			params: ['div'],
 			fn: function(writer, input) {
-				writer.write(input.div);
+				writer.setHeader(server.CONSTANTS.HEADER_CONTENT_LENGTH, String(input.div).length);
+				writer.setHeader(server.CONSTANTS.HEADER_CONTENT_TYPE, 'text/html');
+				writer.writePartial(input.div);
 				writer.done();
 			}
 		}
