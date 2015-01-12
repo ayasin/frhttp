@@ -48,7 +48,38 @@ Returns a server object.  You can either use this directly or as part of an Expr
 
 ### Server Object ###
 
+The server object exposes a number of methods related to registering and finding routes as well as several constants under the CONSTANTS field.  The server supports hanging routes off the 4 main REST verbs:
 
+* GET
+* POST
+* PUT
+* DELETE
+
+To achieve this, one would create a server like so:
+```js 
+server = require('FRHTTP').createServer(); 
+```
+
+Then call the verb on the server like so: 
+```js
+server.GET(/* your path here such as /api/client */).onValue(function (route) {
+  // define your route here as explained below
+});
+```
+
+The server object also supports finding existing routes for execution (in case you're adding this to an existing Express app).  These can be found at TAP_{VERB}:
+
+* TAP_GET
+* TAP_POST
+* TAP_PUT
+* TAP_DELETE
+
+You can look up a route like so:
+```js
+server.TAP_GET(/* some url */).onValue(function (excutor) {
+  //execute the route here as explained below
+})
+```
 
 ## Roadmap ##
 
