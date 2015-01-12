@@ -59,4 +59,13 @@ server.GET('/api/divide/:first/:second').onValue(function (path) {
 	);
 });
 
+server.POST('/api/replay').onValue(function (path) {
+	path.process.parseBody().render({
+		params: [server.CONSTANTS.REQUEST_BODY],
+		fn: function(writer, input) {
+			writer.writeBody('You sent ' + input[server.CONSTANTS.REQUEST_BODY]);
+		}
+	});
+});
+
 server.listen(8001);
