@@ -116,7 +116,7 @@ The function in the on definition takes 2 parameters.  First is the producer.  T
   error: function(httpErrorCode, description)
 }
 ```
-You may call value to produce any values you have declared.  You may produce the same value multiple times or not produce a value you've declared, and you may do so syncronously or asynchronously but you *MUST* call done once you've produced all the values you are going to produce.  You may *NOT* produce values you have not declared.
+You may call value to produce any values you have declared.  You may produce the same value multiple times (such as accepting an array and then producing each element as an idividual value), and you may do so syncronously or asynchronously but you *MUST* call done once you've produced all the values you are going to produce.  You may *NOT* produce values you have not declared.
 
 The render definition is quite similar to the process definition but for 2 factors.  First, there's only ever 1 render function, so there's no `on` method.  Second the first parameter to the render function is a writer not a producer.  The render function will always be called once no more producers can run unless there was an error.  Any parameters which aren't available but are requested by the render function will be present but null.  The writer has the following signature:
 ```js
@@ -142,7 +142,15 @@ server.listen(8000); //8000 can be replaced with any valid and available port nu
 
 ### Using as part of an Express/Connect/Etc app ###
 
-Using a FRHTTP route in an Express/Connect app is only slightly more work than standalone mode.  Lets assume that your Express app is in the variable `app`.  The following code would 
+Using a FRHTTP route in an Express/Connect app is only slightly more work than standalone mode.  Lets assume that your Express app is in the variable `app` and your FRHTTP server is in a variable called `server`.  The following code would execute a route on a get call:
+```js
+app.get('/api/doSomething', function(req, res) {
+  server.TAP_GET('/api/doSomething').onValue(function (executor) {
+    var url = require('url').parse(req.url);
+    executor.execute(url, req, res, executor.inject);
+  });
+});
+```
 
 ## API Guide ##
 
