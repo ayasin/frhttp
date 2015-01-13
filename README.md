@@ -13,7 +13,7 @@ FRHTTP is a backend web framework designed to facilitate the development of func
 * easier to test (since functions can be tested in isolation)
 * facilitates code reuse (potentially even with your frontend)
 * can be used either standalone or as part of your existing Express project
-* 
+
 ## Install ##
 
 ```
