@@ -2,26 +2,26 @@
   "private": true,
   "name": "frhttp",
   "version": "0.0.1",
-  "description": "Functional Reactive HTTP server for Node.js",
-  "main": "index.js",
+  "description": "Functional Reactive HTTP server for Node.js.  Can be used in place of or along side ExpressJS.",
+  "main": "./lib/frhttp.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ayasin/frexpress.git"
+    "url": "git://github.com/ayasin/frhttp.git"
   },
   "keywords": [
-    "frexpress",
+    "frhttp",
     "http",
     "server"
   ],
-  "author": "",
+  "author": "ayasin@datatensor.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ayasin/frexpress/issues"
+    "url": "https://github.com/ayasin/frhttp/issues"
   },
-  "homepage": "https://github.com/ayasin/frexpress",
+  "homepage": "https://github.com/ayasin/frhttp",
   "dependencies": {
     "baconjs": "~0.7.38",
     "immutable": "~3.3.0",

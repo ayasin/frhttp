@@ -59,6 +59,40 @@ server.GET('/api/divide/:first/:second').onValue(function (path) {
 	);
 });
 
+server.GET('/api/isSquareRoot/:number/:possibleSqrt').onValue(function (route) {
+	route.process.on({
+		name: 'doubleIt',
+		params: [server.CONSTANTS.URL_VARS],
+		produces: ['sqrtToPow2'],
+		fn: function(produce, input) {
+			var possibleSqrt = +input[server.CONSTANTS.URL_VARS].possibleSqrt;
+			produce.value('sqrtToPow2', possibleSqrt*possibleSqrt);
+			produce.done();
+		}
+	}).on({
+		name: 'checkIt',
+		params: [server.CONSTANTS.URL_VARS, 'sqrtToPow2'],
+		produces: ['passed'],
+		fn: function(produce, input) {
+			var checkNum = +input[server.CONSTANTS.URL_VARS].number;
+			produce.value('passed', input.sqrtToPow2 === +checkNum);
+			produce.done();
+		}
+	}).render({
+		params: [server.CONSTANTS.URL_VARS, 'passed'],
+		fn: function(writer, input) {
+			var num = input[server.CONSTANTS.URL_VARS].number,
+				possibleSqrt = input[server.CONSTANTS.URL_VARS].possibleSqrt;
+			if (input.passed) {
+				writer.writeBody(possibleSqrt + ' is the square root of ' + num);
+			}
+			else {
+				writer.writeBody(possibleSqrt + ' is not the square root of ' + num);
+			}
+		}
+	});
+});
+
 server.POST('/api/replay').onValue(function (path) {
 	path.process.parseBody().render({
 		params: [server.CONSTANTS.REQUEST_BODY],
