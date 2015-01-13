@@ -131,11 +131,12 @@ The render definition is quite similar to the process definition but for 2 facto
   writePartial: function(chunk),
   setHeader: function(name, value),
   setCookie: function(name, value),
+  setStatus: function(statusCode),
   done: function()
 }
 ```
 
-If you just want to write a JSON, HTML or text payload, writeBody does all the work necessary.  If you need to write something more complex (transmit a binary file for example), then you can use writePartial.  If you do *NOT* use `writeBody` you *MUST* set your own headers (Content-Length, etc) and you *MUST* call done.
+If you just want to write a JSON, HTML or text payload, writeBody does all the work necessary.  If you need to write something more complex (transmit a binary file for example), then you can use writePartial.  If you do *NOT* use `writeBody` you *MUST* set your own headers (Content-Length, etc) and you *MUST* call done.  If your render function is called, the status defaults to 200.  If you would like to send an alternative status (such as for a redirect), you should call setStatus before calling any write function.
 
 When this route executes, the system will run any functions that can run with available data.  In this case, that's the first `on` function because the url variables are ready.  The second function can't run because even though the url variables are ready, `sqrtToPow2` is not. Once the first function runs, it produces `sqrtToPow2`.  This allows the second function to run.  The run will proceed in this fashion until no more functions can be called based on the available data.  At this point the system will call the render function and produce output.
 
@@ -167,15 +168,15 @@ Returns a server object.  You can either use this directly or as part of an Expr
 ### Server Object ###
 
 The server object exposes a number of methods related to registering and finding routes as well as several constants under the CONSTANTS field.  The server supports hanging routes off the 4 main REST verbs:
-
-* GET
-* POST
-* PUT
-* DELETE
-
+```
+function GET(path)
+function POST(path)
+function PUT(path)
+function DELETE(path)
+```
 To achieve this, one would create a server like so:
 ```js 
-server = require('FRHTTP').createServer(); 
+server = require('frhttp').createServer(); 
 ```
 
 Then call the verb on the server like so: 
@@ -186,12 +187,12 @@ server.GET(/* your path here such as /api/client */).onValue(function (route) {
 ```
 
 The server object also supports finding existing routes for execution (in case you're adding this to an existing Express app).  These can be found at TAP_{VERB}:
-
-* TAP_GET
-* TAP_POST
-* TAP_PUT
-* TAP_DELETE
-
+```
+function TAP_GET(path)
+function TAP_POST(path)
+function TAP_PUT(path)
+function TAP_DELETE(path)
+```
 You can look up a route like so:
 ```js
 server.TAP_GET(/* some url */).onValue(function (excutor) {
