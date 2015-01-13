@@ -104,14 +104,45 @@ name | No | the name of the function, used for debugging and error reporting pur
 params | No | the parameters you require.  These will be passed to you as an object to the second parameter to your function.  If you don't require any parameters you can omit this field.
 produces | No | the parameters your function produces.
 fn | Yes | the function to execute when all the parameters are ready.
-enter exit, takeMany | No | parameters for advanced usage described in the API section below
+enter exit, inject, takeMany | No | parameters for advanced usage described in the API section below
 
+Our first on definition expects the url variables, and produces a field called `sqrtToPow2`, our second on definition (the order doesn't matter here, it would work just fine to make this the first function) takes the url variables and `sqrtToPow2` as inputs and produces a field called `passed`.  Finally our render function takes the url variables and `passed` as inputs to write out the result.
 
+The function in the on definition takes 2 parameters.  First is the producer.  This has 3 methods:
+```js
+{
+  value: function (name, value),
+  done: function (),
+  error: function(httpErrorCode, description)
+}
+```
+You may call value to produce any values you have declared.  You may produce the same value multiple times or not produce a value you've declared, and you may do so syncronously or asynchronously but you *MUST* call done once you've produced all the values you are going to produce.  You may *NOT* produce values you have not declared.
 
+The render definition is quite similar to the process definition but for 2 factors.  First, there's only ever 1 render function, so there's no `on` method.  Second the first parameter to the render function is a writer not a producer.  The render function will always be called once no more producers can run unless there was an error.  Any parameters which aren't available but are requested by the render function will be present but null.  The writer has the following signature:
+```js
+{
+  writeBody: function(body),
+  writePartial: function(chunk),
+  setHeader: function(name, value),
+  setCookie: function(name, value),
+  done: function()
+}
+```
 
-### Starting the server in stand alone mode ###
+If you just want to write a JSON, HTML or text payload, writeBody does all the work necessary.  If you need to write something more complex (transmit a binary file for example), then you can use writePartial.  If you do *NOT* use `writeBody` you *MUST* set your own headers (Content-Length, etc) and you *MUST* call done.
+
+When this route executes, the system will run any functions that can run with available data.  In this case, that's the first `on` function because the url variables are ready.  The second function can't run because even though the url variables are ready, `sqrtToPow2` is not. Once the first function runs, it produces `sqrtToPow2`.  This allows the second function to run.  The run will proceed in this fashion until no more functions can be called based on the available data.  At this point the system will call the render function and produce output.
+
+### Starting the server in standalone mode ###
+
+Starting is standalone mode is quite simple.  Just run the listen method on the server with a port number like so:
+```js
+server.listen(8000); //8000 can be replaced with any valid and available port number
+```
 
 ### Using as part of an Express/Connect/Etc app ###
+
+Using a FRHTTP route in an Express/Connect app is only slightly more work than standalone mode.  Lets assume that your Express app is in the variable `app`.  The following code would 
 
 ## API Guide ##
 
