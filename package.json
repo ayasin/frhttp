@@ -24,6 +24,7 @@
   "dependencies": {
     "baconjs": "~0.7.38",
     "immutable": "~3.3.0",
-    "lodash": "~2.4.1"
+    "lodash": "~2.4.1",
+    "json-stringify-safe": "~5.0.0"
   }
 }
