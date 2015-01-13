@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "frhttp",
   "version": "0.0.1",
   "description": "Functional Reactive HTTP server for Node.js.  Can be used in place of or along side ExpressJS.",
