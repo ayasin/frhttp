@@ -228,6 +228,11 @@ enter | No | a function that will be called with the paramter object prior to ca
 exit | No | a function called after each value produced by fn.  The value returned by exit will be published instead of the value produced by fn.
 takeMany | No | false by default.  If set to true, fn can be called each time params are available, otherwise fn will only be called the first time params are available.
 
+One way to consider enter, fn and exit are: 
+```js
+stream.map(enter).flatMap(fn).map(exit)
+```
+
 `fn` signature:
 ```js
 function fn(produce, input)
