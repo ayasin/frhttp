@@ -168,11 +168,11 @@ Returns a server object.  You can either use this directly or as part of an Expr
 ### Server Object ###
 
 The server object exposes a number of methods related to registering and finding routes as well as several constants under the CONSTANTS field.  The server supports hanging routes off the 4 main REST verbs:
-```
-function GET(path)
-function POST(path)
-function PUT(path)
-function DELETE(path)
+```js
+GET(path)
+POST(path)
+PUT(path)
+DELETE(path)
 ```
 To achieve this, one would create a server like so:
 ```js 
@@ -187,11 +187,11 @@ server.GET(/* your path here such as /api/client */).onValue(function (route) {
 ```
 
 The server object also supports finding existing routes for execution (in case you're adding this to an existing Express app).  These can be found at TAP_{VERB}:
-```
-function TAP_GET(path)
-function TAP_POST(path)
-function TAP_PUT(path)
-function TAP_DELETE(path)
+```js
+TAP_GET(path)
+TAP_POST(path)
+TAP_PUT(path)
+TAP_DELETE(path)
 ```
 You can look up a route like so:
 ```js
@@ -199,6 +199,76 @@ server.TAP_GET(/* some url */).onValue(function (excutor) {
   //execute the route here as explained below
 })
 ```
+The last method on the Server object is the `listen` method.  
+```js
+listen(portNumber)
+```
+The single parameter to this method is a port number to bind to.  If you plan to use FRHTTP along side Express (to handle some of the routes), you do not need to call listen.
+
+### Route configuration object ###
+
+The route configuration object is passed to the onValue function for every configuration function on the Server object (GET, POST, PUT, DELETE).  The object exposes the `process` property and a `render` config function.  The `process` property exposes the following properties and methods:
+
+Field | Description
+------|------------
+on(def) | Connects a function to the route via the def object (described below).  Returns the process object so you can chain calls
+inject(obj) | Allows you to preset fields needed by functions.  The obj should be a POJO (plain old javascript object).  Returns the process object so you can chain calls
+parseBody() | Parses the body into a field you can access by requesting server.CONSTANTS.REQUEST_BODY.  Returns the process object so you can chain calls.  You should attach this no more than once (you can skip it if you either don't need the body or prefer to parse it yourself).  Calling this function multiple times may result in strange behaviour.
+render(def) | Defines the render function.  The def object is described below.  Returns undefined.  This should be the last method you call in setting up a chain and should only be called once.  Multiple calls to this method will replace the previous definition with the one in the lastest call.
+
+`process.on` definition object
+
+field | required | description
+------|----------|---------------
+name | No | the name of the function, used for debugging and error reporting purposes. While this is optional it's highly recommended. 
+params | No | the parameters you require.  These will be passed to you as an object to the second parameter to your function.  If you don't require any parameters you can omit this field.
+produces | No | the parameters your function produces.
+fn | Yes | the function to execute when all the parameters are ready.
+enter | No | a function that will be called with the paramter object prior to calling fn.  The value returned from the enter function is passed to fn.  To prevent fn from being called return undefined from the enter function (allowing enter to be used as a filter function).
+exit | No | a function called after each value produced by fn.  The value returned by exit will be published instead of the value produced by fn.
+takeMany | No | false by default.  If set to true, fn can be called each time params are available, otherwise fn will only be called the first time params are available.
+
+`fn` signature:
+```js
+function fn(produce, input)
+```
+
+`produce` object:
+```js
+{
+  value: function (name, value), // name: name of field to produce, value: value
+  done: function (),
+  error: function(httpErrorCode, description)
+}
+```
+
+`render` definition object
+
+field | required | description
+------|----------|---------------
+params | Yes | the parameters you require.  These will be passed to you as an object to the second parameter to your function.  Any value not produced during the process phase will be set to null in the second parameter to fn.
+fn | Yes | the function to execute when all the parameters are ready.
+
+`fn` signature:
+```js
+function fn(writer, input)
+```
+
+`writer` object:
+```js
+{
+  writeBody: function(body),
+  writePartial: function(chunk),
+  setHeader: function(name, value),
+  setCookie: function(name, value),
+  setStatus: function(statusCode),
+  done: function()
+}
+```
+
+### Route executor object ###
+
+If you plan to use frhttp via the listen method and not as part of an Express app, you do not need to worry about the route executor object.  
 
 ## Roadmap ##
 
