@@ -97,6 +97,7 @@ server.POST('/api/replay').onValue(function (path) {
 	path.process.parseBody().render({
 		params: [server.CONSTANTS.REQUEST_BODY],
 		fn: function(writer, input) {
+			writer.setStatus(201);
 			writer.writeBody('You sent ' + input[server.CONSTANTS.REQUEST_BODY]);
 		}
 	});
