@@ -5,8 +5,12 @@ var FRHttp = require('./lib/frhttp.js');
 var server = FRHttp.createServer();
 var Bacon = require('baconjs');
 
+var _ = require('lodash');
+var bus = new Bacon.Bus();
+bus.log();
+
 server.GET('/api/multiply/:first/:second').onValue(function (path) {
-	path.process.when(
+	path.when(
 		{
 			name: 'multiply',
 			enter: null,
@@ -29,7 +33,7 @@ server.GET('/api/multiply/:first/:second').onValue(function (path) {
 });
 
 server.GET('/api/divide/:first/:second').onValue(function (path) {
-	path.process.when(
+	path.when(
 		{
 			name: 'divide',
 			enter: null,
@@ -61,7 +65,7 @@ server.GET('/api/divide/:first/:second').onValue(function (path) {
 });
 
 server.GET('/api/isSquareRoot/:number/:possibleSqrt').onValue(function (route) {
-	route.process.when({
+	route.when({
 		name: 'doubleIt',
 		params: [server.CONSTANTS.URL_VARS],
 		produces: ['sqrtToPow2'],
@@ -95,7 +99,7 @@ server.GET('/api/isSquareRoot/:number/:possibleSqrt').onValue(function (route) {
 });
 
 server.POST('/api/replay').onValue(function (path) {
-	path.process.parseBody().render({
+	path.parseBody().render({
 		params: [server.CONSTANTS.REQUEST_BODY],
 		fn: function(writer, input) {
 			writer.setStatus(201);
@@ -105,7 +109,7 @@ server.POST('/api/replay').onValue(function (path) {
 });
 
 server.GET('/api/factorial/:number').onValue(function (route) {
-	route.process.when({
+	route.when({
 		name: 'setup',
 		params: [server.CONSTANTS.URL_VARS],
 		produces: ['max', 'total'],
@@ -143,4 +147,21 @@ server.GET('/api/factorial/:number').onValue(function (route) {
 	)
 });
 
+server.GET('/api/matches').onValue(function (route) {
+	route.inject({theBus : function () {return bus;}}).when({
+			name: 'makes another bus',
+			params: [],
+			produces: ['anotherBus'],
+			fn : function(producer) {
+				producer.value('anotherBus', new Bacon.Bus());
+				return producer.done();
+			}
+		}).render({
+		params: ['theBus'],
+		fn: function (writer, input) {
+			//input.theBus().push(12);
+			writer.writeBody('theBus() === bus: ' + (input.theBus() === bus));
+		}
+	});
+});
 server.listen(8001);

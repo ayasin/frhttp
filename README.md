@@ -27,7 +27,7 @@ var FRHTTP = require('frhttp');
 var server = FRHTTP.createServer();
 
 server.GET('/hello').onValue(function (route) {
-  route.process.when({
+  route.when({
     name: 'hello_world'
     params: [],
     produces: ['message'],
@@ -58,11 +58,11 @@ var server = require('frhttp').createServer();
 
 ### Defining a route ###
 
-Defining routes in FRHTTP is relatively easy.  Routes are separated by HTTP verbs (GET, POST, PUT, DELETE) and can be created or retrieved via similarly named methods when the server object.  The method calls return a stream (in usage here, conceptually similar to a promise) with an onValue method.  The onValue method takes a function which will receive the route.  Once you have the route you can set up the process functions as well as the render function.  Lets look at some code:
+Defining routes in FRHTTP is relatively easy.  Routes are separated by HTTP verbs (GET, POST, PUT, DELETE) and can be created or retrieved via similarly named methods when the server object.  The method calls return a stream (in usage here, conceptually similar to a promise) with an onValue method.  The onValue method takes a function which will receive the route.  Once you have the route you can set up the `when` functions as well as the render function.  Lets look at some code:
 
 ```js
 server.GET('/api/isSquareRoot/:number/:possibleSqrt').onValue(function (route) {
-	route.process.when({
+	route.when({
 		name: 'doubleIt',
 		params: [server.CONSTANTS.URL_VARS],
 		produces: ['sqrtToPow2'],
@@ -102,7 +102,7 @@ Lets analyze this code from the top.  First we see that we're configuring a GET 
 
 Recall from earlier we mentioned that the GET (and in fact any server function other than listen) returns a stream.  We call the onValue method of that stream to get our actual route for configuration.
 
-Once we have our route we can start configuring it.  A route has 2 phases, `process` and `render`.  In the process phase, we set up functions to be called when data is ready.  To do this, we use the `on` method of process.  Note that `when` is chainable so we don't need to keep calling `route.process`.  `when` takes a function definition object.  Here's what that object contains:
+Once we have our route we can start configuring it.  A route has 2 phases, `process` and `render`.  In the process phase, we set up functions to be called when data is ready.  To do this, we use the `when` method of the route.  Note that `when` is chainable so we don't need to keep calling `route`.  `when` takes a function definition object.  Here's what that object contains:
 
 field | required | description
 ------|----------|---------------
@@ -216,7 +216,7 @@ inject(obj) | Allows you to preset fields needed by functions.  The obj should b
 parseBody() | Parses the body into a field you can access by requesting server.CONSTANTS.REQUEST_BODY.  Returns the process object so you can chain calls.  You should attach this no more than once (you can skip it if you either don't need the body or prefer to parse it yourself).  Calling this function multiple times may result in strange behavior.
 render(def) | Defines the render function.  The def object is described below.  Returns undefined.  This should be the last method you call in setting up a chain and should only be called once.  Multiple calls to this method will replace the previous definition with the one in the latest call.
 
-`process.when` definition object
+`when` definition object
 
 field | required | description
 ------|----------|---------------

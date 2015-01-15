@@ -2,7 +2,7 @@ var frhttp = require('../lib/frhttp.js');
 
 var child = require('child_process');
 
-describe('Server Test Suite', function () {
+describe('Server Tests', function () {
 	var server;
 
 
@@ -32,17 +32,17 @@ describe('Server Test Suite', function () {
 	});
 });
 
-describe('Blackbox server tests', function() {
-	var proc;
+describe('Route descriptor and executor tests', function() {
+	var runningServer;
 
 	it('should spawn a server', function (done) {
-		proc = child.spawn('node', ['./spec/server_runner.js']);
+		runningServer = child.spawn('node', ['./spec/server_runner.js']);
 		done();
 	});
 
 
 	it('should kill the server', function (done) {
-		proc.kill('SIGTERM');
+		runningServer.kill('SIGTERM');
 		done();
 	})
 });
