@@ -4,7 +4,8 @@
   "description": "Functional Reactive HTTP server for Node.js.  Can be used in place of or along side ExpressJS.",
   "main": "./lib/frhttp.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "jshint" : "./node_modules/.bin/jshint . *.js"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
     "json-stringify-safe": "~5.0.0"
   },
   "devDependencies": {
-    "frisby": "~0.8.5"
+    "frisby": "~0.8.5",
+    "jshint": "~2.5.11"
   }
 }
