@@ -53,8 +53,8 @@ describe('Route descriptor and executor tests', function() {
 		.get('http://localhost:8008/test/multiply/2/2').expectStatus(200).expectBodyContains('factoring in (2): 8').toss();
 
 	frisby.create('test post')
-		.post('http://localhost:8008/test/replay', '{a: 15}', {json: true})
-		.expectStatus(200).expectBodyContains('You sent {a: 15}').toss();
+		.post('http://localhost:8008/test/replay', {a: 15}, {json: true})
+		.expectStatus(200).expectBodyContains('You sent {"a":15}').toss();
 
 	it('should kill the server', function (done) {
 		runningServer.kill('SIGTERM');
