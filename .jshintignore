@@ -1,1 +1,10 @@
 **/node_modules/**
+
+##########################################################################################
+# todo: The following to be takne soon, after jshint
+# applied to samples and specs.
+##########################################################################################
+*sample*
+**/*.spec.js
+spec/server_runner.js
+
