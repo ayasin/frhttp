@@ -26,5 +26,8 @@
     "immutable": "~3.3.0",
     "lodash": "~2.4.1",
     "json-stringify-safe": "~5.0.0"
+  },
+  "devDependencies": {
+    "frisby": "~0.8.5"
   }
 }

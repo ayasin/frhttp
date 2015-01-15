@@ -4,35 +4,19 @@
 var FRHttp = require('../lib/frhttp.js');
 var server = FRHttp.createServer();
 
-server.GET('/test/multiply/:first/:second').onValue(function (path) {
-	path.process.when(
-		{
-			name: 'multiply',
-			enter: null,
-			exit: null,
-			params: ['request:url_vars', 'factor'],
-			produces: ['mul'],
-			fn: function (produce, input) {
-				produce.value('mul', input['request:url_vars'].first * input['request:url_vars'].second * input.factor);
-				produce.done();
-			}
+server.GET('/test/hello').onValue(function (route) {
+	route.render({
+		params: [],
+		fn: function(writer) {
+			writer.writeBody('hello');
 		}
-	).inject({factor: 2}).inject({monkey: 'balls'}).render(
-		{
-			params: ['mul', 'factor'],
-			fn: function(writer, input) {
-				writer.writeBody('factoring in (' + input.factor + '): ' + input.mul);
-			}
-		}
-	);
+	});
 });
 
 server.GET('/test/divide/:first/:second').onValue(function (path) {
-	path.process.when(
+	path.when(
 		{
 			name: 'divide',
-			enter: null,
-			exit: null,
 			params: ['request:url_vars'],
 			produces: ['div'],
 			fn: function (produce, input) {
@@ -59,8 +43,30 @@ server.GET('/test/divide/:first/:second').onValue(function (path) {
 	);
 });
 
+server.GET('/test/multiply/:first/:second').onValue(function (path) {
+	path.inject({factor: 2})
+		.when(
+		{
+			name: 'multiply',
+			params: ['request:url_vars', 'factor'],
+			produces: ['mul'],
+			fn: function (produce, input) {
+				produce.value('mul', input['request:url_vars'].first * input['request:url_vars'].second * input.factor);
+				produce.done();
+			}
+		}
+	).render(
+		{
+			params: ['mul', 'factor'],
+			fn: function(writer, input) {
+				writer.writeBody('factoring in (' + input.factor + '): ' + input.mul);
+			}
+		}
+	);
+});
+
 server.POST('/test/replay').onValue(function (path) {
-	path.process.parseBody().render({
+	path.parseBody().render({
 		params: [server.CONSTANTS.REQUEST_BODY],
 		fn: function(writer, input) {
 			writer.setStatus(200);
@@ -70,7 +76,7 @@ server.POST('/test/replay').onValue(function (path) {
 });
 
 server.GET('/test/factorial/:number').onValue(function (route) {
-	route.process.when({
+	route.when({
 		name: 'setup',
 		params: [server.CONSTANTS.URL_VARS],
 		produces: ['max', 'total'],
