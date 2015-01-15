@@ -11,6 +11,7 @@ FRHTTP is a backend web framework designed to facilitate the development of func
 * eliminates callback hell
 * easy to reason about
 * easier to test (since functions can be tested in isolation)
+* FAR better error messages
 * facilitates code reuse (potentially even with your frontend)
 * can be used either standalone or as part of your existing Express project
 
@@ -227,6 +228,7 @@ fn | Yes | the function to execute when all the parameters are ready.
 enter | No | a function that will be called with the parameter object prior to calling fn.  The value returned from the enter function is passed to fn.  To prevent fn from being called return undefined from the enter function (allowing enter to be used as a filter function).
 exit | No | a function called after each value produced by fn.  The value returned by exit will be published instead of the value produced by fn.
 takeMany | No | false by default.  If set to true, fn can be called each time params are available, otherwise fn will only be called the first time params are available.
+sync | No | Normally functions are called on the nextTick after variables are ready.  This calls the function immediately.  While normally you don't want to do this, it is necessary for reading the body of the request.
 
 One way to consider enter, fn and exit are: 
 ```js
