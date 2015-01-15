@@ -40,21 +40,27 @@ describe('Route descriptor and executor tests', function() {
 		setTimeout(function () {done();}, 1000);
 	});
 
-	frisby.create('test basic hello')
+	frisby.create('basic hello')
 		.get('http://localhost:8008/test/hello').expectStatus(200).expectBodyContains('hello').toss();
 
-	frisby.create('test url variables')
+	frisby.create('url variables')
 		.get('http://localhost:8008/test/divide/4/2').expectStatus(200).expectBodyContains('2').toss();
 
-	frisby.create('test error production')
+	frisby.create('error production')
 		.get('http://localhost:8008/test/divide/4/0').expectStatus(500).expectBodyContains('Divide by 0').toss();
 
-	frisby.create('test inject constant')
+	frisby.create('inject constant')
 		.get('http://localhost:8008/test/multiply/2/2').expectStatus(200).expectBodyContains('factoring in (2): 8').toss();
 
-	frisby.create('test post')
+	frisby.create('post')
 		.post('http://localhost:8008/test/replay', {a: 15}, {json: true})
 		.expectStatus(200).expectBodyContains('You sent {"a":15}').toss();
+
+	frisby.create('enter filter and recursive production')
+		.get('http://localhost:8008/test/factorial/4').expectStatus(200).expectBodyContains('24').toss();
+
+	frisby.create('exit filter')
+		.get('http://localhost:8008/test/makeFactorialNegative/4').expectStatus(200).expectBodyContains('-24').toss();
 
 	it('should kill the server', function (done) {
 		runningServer.kill('SIGTERM');
