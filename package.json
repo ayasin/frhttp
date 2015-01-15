@@ -4,7 +4,7 @@
   "description": "Functional Reactive HTTP server for Node.js.  Can be used in place of or along side ExpressJS.",
   "main": "./lib/frhttp.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jasmine-node spec/",
     "jshint" : "./node_modules/.bin/jshint . *.js"
   },
   "repository": {
