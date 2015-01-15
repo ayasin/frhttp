@@ -279,8 +279,6 @@ If you plan to use frhttp via the listen method and not as part of an Express ap
 
 ## Roadmap ##
 
-* Tests
-* More docs
+* More docs/guides
 * Demonstrate how to integrate with PassportJS
-* Samples folder
 * Websocket support
