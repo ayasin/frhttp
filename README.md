@@ -1,4 +1,4 @@
-FRHTTP
+FRHTTP [![Build Status](https://travis-ci.org/ayasin/frhttp.svg?branch=master)](https://travis-ci.org/ayasin/frhttp)
 =========
 
 > Simplicity is prerequisite for reliability.
