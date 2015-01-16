@@ -59,7 +59,7 @@ var server = require('frhttp').createServer();
 
 ### Defining a route ###
 
-Defining routes in FRHTTP is relatively easy.  Routes are separated by HTTP verbs (GET, POST, PUT, DELETE) and can be created or retrieved via similarly named methods when the server object.  The method calls return a stream (in usage here, conceptually similar to a promise) with an onValue method.  The onValue method takes a function which will receive the route.  Once you have the route you can set up the `when` functions as well as the render function.  Lets look at some code:
+Defining routes in FRHTTP is relatively easy.  Routes are separated by HTTP verbs (GET, POST, PUT, DELETE) and can be created or retrieved via similarly named methods on the server object.  The method calls return a stream (in usage here, conceptually similar to a promise) with an onValue method.  The onValue method takes a function which will receive the route.  Once you have the route you can set up the `when` functions as well as the render function.  Lets look at some code:
 
 ```js
 server.GET('/api/isSquareRoot/:number/:possibleSqrt').onValue(function (route) {
@@ -228,7 +228,6 @@ fn | Yes | the function to execute when all the parameters are ready.
 enter | No | a function that will be called with the parameter object prior to calling fn.  The value returned from the enter function is passed to fn.  To prevent fn from being called return undefined from the enter function (allowing enter to be used as a filter function).
 exit | No | a function called after each value produced by fn.  The value returned by exit will be published instead of the value produced by fn.
 takeMany | No | false by default.  If set to true, fn can be called each time params are available, otherwise fn will only be called the first time params are available.
-sync | No | Normally functions are called on the nextTick after variables are ready.  This calls the function immediately.  While normally you don't want to do this, it is necessary for reading the body of the request.
 
 One way to consider enter, fn and exit are: 
 ```js
