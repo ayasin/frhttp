@@ -214,8 +214,14 @@ Field | Description
 ------|------------
 when(def) | Connects a function to the route via the def object (described below).  Returns the process object so you can chain calls
 inject(obj) | Allows you to preset fields needed by functions.  The obj should be a POJO (plain old javascript object).  Returns the process object so you can chain calls
-parseBody() | Parses the body into a field you can access by requesting server.CONSTANTS.REQUEST_BODY.  Returns the process object so you can chain calls.  You should attach this no more than once (you can skip it if you either don't need the body or prefer to parse it yourself).  Calling this function multiple times may result in strange behavior.
 render(def) | Defines the render function.  The def object is described below.  Returns undefined.  This should be the last method you call in setting up a chain and should only be called once.  Multiple calls to this method will replace the previous definition with the one in the latest call.
+WHEN | A series of built in common when blocks.  You would use this like so `route.when(server.WHEN.BODY).when(...)...`
+
+Build in `WHEN` blocks
+
+Name | Description | Requires | Produces
+-----|-------------|----------|---------
+BODY | Read the body of the request (mostly applies to POST and PUT requests). | CONSTANTS.REQUEST | CONSTANTS.REQUEST_BODY
 
 `when` definition object
 
