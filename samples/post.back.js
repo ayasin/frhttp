@@ -6,7 +6,7 @@ function createRoute(server) {
 	 */
 
 	server.POST('/samples/postBack').onValue(function (path) {
-		path.parseBody().render({
+		path.when(server.WHEN.BODY).render({
 			params: [server.CONSTANTS.REQUEST_BODY],
 			fn: function(writer, input) {
 				writer.setStatus(200);

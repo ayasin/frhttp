@@ -13,6 +13,26 @@ server.GET('/test/hello').onValue(function (route) {
 	});
 });
 
+server.GET('/test/wild/*').onValue(function (path) {
+	path.render({
+		params: [server.CONSTANTS.URL_VARS],
+		fn: function(writer, input) {
+			var urlVars = input[server.CONSTANTS.URL_VARS];
+			writer.writeBody(urlVars[server.CONSTANTS.URL_VAR_WILDCARD]);
+		}
+	});
+});
+
+server.GET('/test/wild/override').onValue(function (path) {
+	path.render({
+		params: [],
+		fn: function(writer, input) {
+			var urlVars = input[server.CONSTANTS.URL_VARS];
+			writer.writeBody('no wildcard in route');
+		}
+	});
+});
+
 server.GET('/test/divide/:first/:second').onValue(function (path) {
 	path.when(
 		{
@@ -66,11 +86,81 @@ server.GET('/test/multiply/:first/:second').onValue(function (path) {
 });
 
 server.POST('/test/replay').onValue(function (path) {
-	path.parseBody().render({
+	path.when(server.WHEN.BODY).render({
 		params: [server.CONSTANTS.REQUEST_BODY],
 		fn: function(writer, input) {
 			writer.setStatus(200);
 			writer.writeBody('You sent ' + input[server.CONSTANTS.REQUEST_BODY]);
+		}
+	});
+});
+
+server.GET('/test/processOrder').onValue(function (route) {
+	route.when({
+		name: 'callLast',
+		params: ['order', 'callLast'],
+		produces: ['callNext', 'order'],
+		fn: function(produce, input) {
+			produce.value('order',  input.order + 'callLast');
+			produce.done();
+		}
+	}).when({
+		name: 'callFirst',
+		params: [],
+		produces: ['callNext', 'order'],
+		fn: function(produce, input) {
+			produce.value('order', 'callFirst ');
+			produce.value('callNext', 1);
+			produce.done();
+		}
+	}).when({
+		name: 'callNext',
+		params: ['callNext', 'order'],
+		produces: ['callLast', 'order'],
+		fn: function(produce, input) {
+			produce.value('order', input.order + 'callNext ');
+			produce.value('callLast', 1);
+			produce.done();
+		}
+	}).render({
+		params: ['order'],
+		fn: function (writer, input) {
+			writer.writeBody(input.order);
+		}
+	});
+});
+
+server.GET('/test/skipNotProduced').onValue(function (route) {
+	route.when({
+		name: 'callLast fn',
+		params: ['order', 'callLast'],
+		produces: ['callNext', 'order'],
+		fn: function(produce, input) {
+			produce.value('order',  input.order + 'callLast');
+			produce.done();
+		}
+	}).when({
+		name: 'callFirst fn',
+		params: [],
+		produces: ['callLast', 'order'],
+		fn: function(produce, input) {
+			produce.value('order', 'callFirst ');
+			produce.value('callLast', 1);
+			produce.done();
+		}
+	}).when({
+		name: 'callNext fn',
+		params: ['order', 'callNext'],
+		produces: ['callLast', 'order'],
+		fn: function(produce, input) {
+			produce.value('order', input.order + 'callNext ');
+			produce.value('callLast', 1);
+			produce.done();
+		}
+	}).render({
+		params: ['order'],
+		fn: function (writer, input) {
+			writer.writeBody(input.order);
 		}
 	});
 });

@@ -43,6 +43,15 @@ describe('Route descriptor and executor tests', function() {
 	frisby.create('basic hello')
 		.get('http://localhost:8008/test/hello').expectStatus(200).expectBodyContains('hello').toss();
 
+	frisby.create('wildcard in route')
+		.get('http://localhost:8008/test/wild/*/next/part/of/path').expectStatus(200).expectBodyContains('next/part/of/path').toss();
+
+	frisby.create('wildcard override')
+		.get('http://localhost:8008/test/wild/override').expectStatus(200).expectBodyContains('no wildcard in route').toss();
+
+	frisby.create('wildcard override correctly 404s on no match after override')
+		.get('http://localhost:8008/test/wild/override/bingo').expectStatus(404).toss();
+
 	frisby.create('url variables')
 		.get('http://localhost:8008/test/divide/4/2').expectStatus(200).expectBodyContains('2').toss();
 
@@ -51,6 +60,12 @@ describe('Route descriptor and executor tests', function() {
 
 	frisby.create('inject constant')
 		.get('http://localhost:8008/test/multiply/2/2').expectStatus(200).expectBodyContains('factoring in (2): 8').toss();
+
+	frisby.create('call blocks in order of production')
+		.get('http://localhost:8008/test/processOrder').expectStatus(200).expectBodyContains('callFirst callNext callLast').toss();
+
+	frisby.create('skip a block if the values can\'t be produced')
+		.get('http://localhost:8008/test/skipNotProduced').expectStatus(200).expectBodyContains('callFirst callLast').toss();
 
 	frisby.create('post')
 		.post('http://localhost:8008/test/replay', {a: 15}, {json: true})
