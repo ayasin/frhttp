@@ -206,6 +206,21 @@ listen(portNumber)
 ```
 The single parameter to this method is a port number to bind to.  If you plan to use FRHTTP along side Express (to handle some of the routes), you do not need to call listen.
 
+### Route definition ###
+
+A route can be any valid URL path. 2 special characters exist in the route definition which cause the route to behave differently from a static route.  These are `:` and `*`.  `:` is a variable marker and `*` is a wildcard marker.  Any number of variables are allowed in a route, but only 0 or 1 wildcard markers should appear.  Also wildcard markers should be the last element in the route.
+
+Example routes:
+```
+/a/path -- static route
+/users/:userId/bin/:binId -- a path with 2 variables
+/users/:userId/fileDir/* - a path with a variable and a wildcard
+```
+
+When a request arrives, the server parses the URL into it's constituent parts.  Variables are decoded into the CONSTANTS.URL_VARS object.  The variables are attached to this object using the keys specified in the path.  For example, in the 2 variable path in the example above the variables would be attached to the object at userId and binId.
+
+A special variable exists for paths containing wildcards.  This variable is attached to URL_VARS at URL_VAR_WILDCARD and contains the remainder of the path.  In the example above, if we received a request at `/users/10/fileDir/public/profileImage.png` the URL_VAR_WILDCARD would be `public/profileImage.png`, and userId would be `10`.
+
 ### Route configuration object ###
 
 The route configuration object is passed to the onValue function for every configuration function on the Server object (GET, POST, PUT, DELETE).  The object exposes the `process` property and a `render` config function.  The `process` property exposes the following properties and methods:
@@ -217,7 +232,7 @@ inject(obj) | Allows you to preset fields needed by functions.  The obj should b
 render(def) | Defines the render function.  The def object is described below.  Returns undefined.  This should be the last method you call in setting up a chain and should only be called once.  Multiple calls to this method will replace the previous definition with the one in the latest call.
 WHEN | A series of built in common when blocks.  You would use this like so `route.when(server.WHEN.BODY).when(...)...`
 
-Build in `WHEN` blocks
+Built in `WHEN` blocks
 
 Name | Description | Requires | Produces
 -----|-------------|----------|---------
