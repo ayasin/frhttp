@@ -253,6 +253,7 @@ name | No | the name of the function, used for debugging and error reporting pur
 params | No | the parameters you require.  These will be passed to you as an object to the second parameter to your function.  If you don't require any parameters you can omit this field.
 produces | No | the parameters your function produces.
 fn | Yes | the function to execute when all the parameters are ready.
+triggerOn | No | an array of fields you wish to monitor.  See [the wiki](https://github.com/ayasin/frhttp/wiki/When#triggeron] for more details.
 enter | No | a function that will be called with the parameter object prior to calling fn.  The value returned from the enter function is passed to fn.  To prevent fn from being called return undefined from the enter function (allowing enter to be used as a filter function).
 exit | No | a function called after each value produced by fn.  The value returned by exit will be published instead of the value produced by fn.
 takeMany | No | false by default.  If set to true, fn can be called each time params are available, otherwise fn will only be called the first time params are available.
