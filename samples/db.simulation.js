@@ -8,17 +8,16 @@ function createRoute(server) {
 	 * demo purposes.
 	 */
 
-	server.GET('/samples/querySimulator/:delay').onValue(function (route) {
+	server.GET('/samples/querySimulator/:items').onValue(function (route) {
 		route.when({
 			/**
 			 * set up the initial values for results and last row.  We're using a 'when' instead of 'inject' because
 			 * we want these values to change.  'inject' values are constants.
 			 */
 			name: 'initially',
-			produces: ['result', 'last_row'],
+			produces: ['result'],
 			fn: function(producer) {
 				producer.value('result', []);
-				producer.value('last_row', null);
 				producer.done();
 			}
 		}).when({
@@ -29,8 +28,7 @@ function createRoute(server) {
 			params: [server.CONSTANTS.URL_VARS],
 			produces: ['row'],
 			fn: function(producer, input) {
-				var maxIterations = 5;
-				var delay = +input[server.CONSTANTS.URL_VARS].delay || 10;
+				var maxIterations = +input[server.CONSTANTS.URL_VARS].items || 10;
 				for (var i=0; i < maxIterations+1; i++) {
 					setTimeout(_.partial(function (iteration) {
 						if (iteration < maxIterations) {
@@ -39,7 +37,7 @@ function createRoute(server) {
 						else {
 							producer.done();
 						}
-					}, i), i * delay);
+					}, i), i * 10);
 				}
 			}
 		}).when({
@@ -48,20 +46,21 @@ function createRoute(server) {
 			 * Note that we 'skip duplicates' using the enter function.
 			 */
 			name: 'merge',
-			params: ['row', 'last_row', 'result'],
-			produces: ['last_row', 'result'],
+			params: ['row', 'result'],
+			triggerOn: ['row'],
+			produces: ['result'],
 			takeMany: true,
-			enter: function (input) {
+			/*enter: function (input) {
 				// if the last row and the row are the same it means we just produced a result and don't need to
 				// do anything more.  Returning undefined ends further execution until something else changes.
 				if (input.last_row === input.row) {
 					return undefined;
 				}
 				return input;
-			},
+			},*/
 			fn: function(producer, input) {
 				// produce the last row first so we prevent this from being called when we produce a new result
-				producer.value('last_row', input.row);
+				//producer.value('last_row', input.row);
 				producer.value('result', input.result.concat([input.row]));
 				producer.done();
 			}
