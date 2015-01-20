@@ -47,7 +47,14 @@ server.GET('/hello').onValue(function (route) {
 server.listen(8000);
 ```
 
+
+## Deatiled Docs ##
+
+[Detailed docs can be found in the wiki](https://github.com/ayasin/frhttp/wiki)
+
 ## User Guide ##
+
+*Note: this info is being migrated to the wiki along with additional details.  For now, if you're new, it's worth reading both*
 
 ### Creating a server ###
 
