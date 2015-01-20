@@ -8,7 +8,7 @@ function createRoute(server) {
 	 *      as easily have 2 independent functions, or 2 independent and 1 dependent function
 	 */
 
-	server.GET('/samples/isSquareRoot/:number/:possibleSqrt').onValue(function (route) {
+	server.GET('/samples/check.square/:number/:possibleSqrt').onValue(function (route) {
 		route.when({
 			name: 'doubleIt',
 			params: [server.CONSTANTS.URL_VARS],

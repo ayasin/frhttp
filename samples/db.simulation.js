@@ -8,7 +8,7 @@ function createRoute(server) {
 	 * demo purposes.
 	 */
 
-	server.GET('/samples/querySimulator/:items').onValue(function (route) {
+	server.GET('/samples/db.simulation/:items').onValue(function (route) {
 		route.when({
 			/**
 			 * set up the initial values for results and last row.  We're using a 'when' instead of 'inject' because
@@ -43,24 +43,15 @@ function createRoute(server) {
 		}).when({
 			/**
 			 * This is the interesting part. This merges all the results in to a single result.
-			 * Note that we 'skip duplicates' using the enter function.
+			 * Note that we avoid getting caught in a loop of 'result updated' by 'triggering on' only row
 			 */
 			name: 'merge',
 			params: ['row', 'result'],
+			// only call our fn when row changes, ignore if only results changes
 			triggerOn: ['row'],
 			produces: ['result'],
 			takeMany: true,
-			/*enter: function (input) {
-				// if the last row and the row are the same it means we just produced a result and don't need to
-				// do anything more.  Returning undefined ends further execution until something else changes.
-				if (input.last_row === input.row) {
-					return undefined;
-				}
-				return input;
-			},*/
 			fn: function(producer, input) {
-				// produce the last row first so we prevent this from being called when we produce a new result
-				//producer.value('last_row', input.row);
 				producer.value('result', input.result.concat([input.row]));
 				producer.done();
 			}

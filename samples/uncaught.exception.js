@@ -6,7 +6,7 @@ function createRoute(server) {
 	 * you get a very helpful message on the console
 	 */
 
-	server.GET('/samples/uncaught').onValue(function (path) {
+	server.GET('/samples/uncaught.exception').onValue(function (path) {
 		path.inject({
 			demo: 'a value'
 		}).when({
@@ -24,7 +24,7 @@ function createRoute(server) {
 		})
 	});
 
-	server.GET('/samples/uncaught/enter').onValue(function (path) {
+	server.GET('/samples/uncaught.exception/enter').onValue(function (path) {
 		path.inject({
 			demo: 'a value'
 		}).when({
@@ -44,7 +44,7 @@ function createRoute(server) {
 		})
 	});
 
-	server.GET('/samples/uncaught/exit').onValue(function (path) {
+	server.GET('/samples/uncaught.exception/exit').onValue(function (path) {
 		path.inject({
 			demo: 'a value'
 		}).when({

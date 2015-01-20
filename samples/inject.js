@@ -13,7 +13,7 @@ function createRoute(server) {
 	 * YOU CAN inject any other kind of object/function.
 	 */
 
-	server.GET('/samples/matches').onValue(function (route) {
+	server.GET('/samples/inject').onValue(function (route) {
 		route.inject({theBus : function () {return bus;}}).when({
 			name: 'makes another bus',
 			params: [],
