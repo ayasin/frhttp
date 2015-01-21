@@ -12,5 +12,6 @@ require('./samples/factorial.js')(server);
 require('./samples/inject.js')(server);
 require('./samples/db.simulation.js')(server);
 require('./samples/uncaught.exception.js')(server);
+require('./samples/send.file.js')(server);
 
 server.listen(8001);
