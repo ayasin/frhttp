@@ -137,6 +137,7 @@ The render definition is quite similar to the process definition but for 2 facto
 {
   writeBody: function(body),
   writePartial: function(chunk),
+  writeFile: function(type, filename, shouldDownloadFileName),
   setHeader: function(name, value),
   setCookie: function(name, value),
   setStatus: function(statusCode),
@@ -145,6 +146,8 @@ The render definition is quite similar to the process definition but for 2 facto
 ```
 
 If you just want to write a JSON, HTML or text payload, writeBody does all the work necessary.  If you need to write something more complex (transmit a binary file for example), then you can use writePartial.  If you do *NOT* use `writeBody` you *MUST* set your own headers (Content-Length, etc) and you *MUST* call done.  If your render function is called, the status defaults to 200.  If you would like to send an alternative status (such as for a redirect), you should call setStatus before calling any write function.
+
+For a detailed explination of the writer [check the wiki](https://github.com/ayasin/frhttp/wiki/Rendering#the-writer-object).
 
 When this route executes, the system will run any functions that can run with available data.  In this case, that's the first `when` function because the url variables are ready.  The second function can't run because even though the url variables are ready, `sqrtToPow2` is not. Once the first function runs, it produces `sqrtToPow2`.  This allows the second function to run.  The run will proceed in this fashion until no more functions can be called based on the available data.  At this point the system will call the render function and produce output.
 
@@ -293,6 +296,7 @@ function fn(writer, input)
 ```js
 {
   writeBody: function(body),
+  writeFile: function(type, fileToSend, downloadOnClient),
   writePartial: function(chunk),
   setHeader: function(name, value),
   setCookie: function(name, value),
@@ -300,6 +304,8 @@ function fn(writer, input)
   done: function()
 }
 ```
+
+See the [wiki page](https://github.com/ayasin/frhttp/wiki/Rendering#the-writer-object) for details
 
 ### Route executor object ###
 
