@@ -178,12 +178,13 @@ Returns a server object.  You can either use this directly or as part of an Expr
 
 ### Server Object ###
 
-The server object exposes a number of methods related to registering and finding routes as well as several constants under the CONSTANTS field.  The server supports hanging routes off the 4 main REST verbs:
+The server object exposes a number of methods related to registering and finding routes as well as several constants under the CONSTANTS field.  The server supports hanging routes off 5 REST verbs:
 ```js
 GET(path)
 POST(path)
 PUT(path)
 DELETE(path)
+OPTIONS(path)
 ```
 To achieve this, one would create a server like so:
 ```js 
@@ -203,6 +204,7 @@ TAP_GET(path)
 TAP_POST(path)
 TAP_PUT(path)
 TAP_DELETE(path)
+TAP_OPTIONS(path)
 ```
 You can look up a route like so:
 ```js
