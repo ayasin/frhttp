@@ -249,4 +249,14 @@ server.GET('/test/makeFactorialNegative/:number').onValue(function (route) {
 	);
 });
 
+server.GET('/test/query.parse').onValue(function (route) {
+	route.when(server.WHEN.QUERY_STRING)
+		.render({
+			params: [server.CONSTANTS.QUERY_VARS],
+			fn: function(writer, input) {
+				writer.writeBody(input[server.CONSTANTS.QUERY_VARS]);
+			}
+		});
+});
+
 server.listen(8008);

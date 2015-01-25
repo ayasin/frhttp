@@ -71,6 +71,9 @@ describe('Route descriptor and executor tests', function() {
 		.post('http://localhost:8008/test/replay', {a: 15}, {json: true})
 		.expectStatus(200).expectBodyContains('You sent {"a":15}').toss();
 
+	frisby.create('parse a query string correctly')
+		.get('http://localhost:8008/test/query.parse?a=10&bob=alice').expectStatus(200).expectJSON({a: '10', 'bob' : 'alice'}).toss();
+
 	frisby.create('enter filter and recursive production')
 		.get('http://localhost:8008/test/factorial/4').expectStatus(200).expectBodyContains('24').toss();
 
