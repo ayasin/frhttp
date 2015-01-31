@@ -9,6 +9,7 @@ require('./samples/divide.js')(server);
 require('./samples/check.square.js')(server);
 require('./samples/post.back.js')(server);
 require('./samples/factorial.js')(server);
+require('./samples/from.callback.js')(server);
 require('./samples/inject.js')(server);
 require('./samples/db.simulation.js')(server);
 require('./samples/uncaught.exception.js')(server);
