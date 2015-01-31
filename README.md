@@ -5,7 +5,7 @@ FRHTTP [![Build Status](https://travis-ci.org/ayasin/frhttp.svg?branch=master)](
 >
 > <sup><sub>-Edsger W. Dijkstra</sub></sup>
 
-FRHTTP is a backend web framework designed to facilitate the development of functional reactive web services/sites.
+FRHTTP is a backend web framework designed to facilitate the development of functional reactive web services/sites.  Incidentally, FRHTTP stands for **F**unctional **R**eactive **H**yper**t**ext **T**ransfer **P**rotocol.
 
 ## Key benefits: ##
 * eliminates callback hell
@@ -22,6 +22,12 @@ npm install frhttp
 ```
 
 ## Quick Start ##
+* Initialize your node project folder.
+* Install FRHTTP (please see above).
+* Copy the code below into your main javascript file, e.g. server.js.
+* Run the app, e.g. `node server.js` 
+* In your browser, open up the URL, http://localhost:8000/hello
+* Enjoy your first FRHTTP application! 
 ```js
 var FRHTTP = require('frhttp');
 
@@ -29,7 +35,7 @@ var server = FRHTTP.createServer();
 
 server.GET('/hello').onValue(function (route) {
   route.when({
-    name: 'hello_world'
+    name: 'hello_world',
     params: [],
     produces: ['message'],
     fn: function (produce, input) {
@@ -37,7 +43,7 @@ server.GET('/hello').onValue(function (route) {
       produce.done();
     }
   }).render({
-    params: ['message'];
+    params: ['message'],
     fn: function (writer, input) {
       writer.writeBody(input.message);
     }
@@ -48,7 +54,7 @@ server.listen(8000);
 ```
 
 
-## Deatiled Docs ##
+## Detailed Docs ##
 
 [Detailed docs can be found in the wiki](https://github.com/ayasin/frhttp/wiki)
 
