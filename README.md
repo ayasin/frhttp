@@ -5,7 +5,7 @@ FRHTTP [![Build Status](https://travis-ci.org/ayasin/frhttp.svg?branch=master)](
 >
 > <sup><sub>-Edsger W. Dijkstra</sub></sup>
 
-FRHTTP is a backend web framework designed to facilitate the development of functional reactive web services/sites.  Incidentally, FRHTTP stands for **F**unctional **R**eactive **H**ypertext **T**ransfer **P**rotocol.
+FRHTTP is a backend web framework designed to facilitate the development of functional reactive web services/sites.  Incidentally, FRHTTP stands for **F**unctional **R**eactive **H**yper**t**ext **T**ransfer **P**rotocol.
 
 ## Key benefits: ##
 * eliminates callback hell
