@@ -279,6 +279,7 @@ function fn(produce, input)
   value: function (name, value), // name: name of field to produce, value: value
   done: function (),
   error: function(httpErrorCode, description)
+  fromNodeCallback: function(produces, cbPosition, functionToWrap, thisBinding, functionArgsMinusCallback...)
 }
 ```
 
