@@ -122,15 +122,16 @@ enter exit, inject, takeMany | No | parameters for advanced usage described in t
 
 Our first when definition expects the url variables, and produces a field called `sqrtToPow2`, our second when definition (the order doesn't matter here, it would work just fine to make this the first function) takes the url variables and `sqrtToPow2` as inputs and produces a field called `passed`.  Finally our render function takes the url variables and `passed` as inputs to write out the result.
 
-The function in the when definition takes 2 parameters.  First is the producer.  This has 3 methods:
+The function in the when definition takes 2 parameters.  First is the producer.  This has 4 methods:
 ```js
 {
   value: function (name, value),
   done: function (),
   error: function(httpErrorCode, description)
+  fromNodeCallback: function(produces, cbPosition, functionToWrap, thisBinding, functionArgsMinusCallback...)
 }
 ```
-You may call value to produce any values you have declared.  You may produce the same value multiple times (such as accepting an array and then producing each element as an individual value), and you may do so synchronously or asynchronously but you *MUST* call done once you've produced all the values you are going to produce.  You may *NOT* produce values you have not declared.
+You may call value to produce any values you have declared.  You may produce the same value multiple times (such as accepting an array and then producing each element as an individual value), and you may do so synchronously or asynchronously but you *MUST* call done once you've produced all the values you are going to produce unless you use fromNodeCallback.  You may *NOT* produce values you have not declared.  [You can find more details on the wiki](https://github.com/ayasin/frhttp/wiki/When#fn)
 
 The render definition is quite similar to the process definition but for 2 factors.  First, there's only ever 1 render function, so there's no `when` method.  Second the first parameter to the render function is a writer not a producer.  The render function will always be called once no more producers can run unless there was an error.  Any parameters which aren't available but are requested by the render function will be present but null.  The writer has the following signature:
 ```js
