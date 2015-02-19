@@ -24,6 +24,27 @@ function createRoute(server) {
 		})
 	});
 
+	server.GET('/samples/uncaught.exception/custom.handler').onValue(function (path) {
+		path.inject({
+			demo: 'a value'
+		}).setCustomErrorHandler(function (writer, code, description) {
+			writer.setStatus(code);
+			writer.writeBody(code + ' : An error occurred, but I intercepted it and wrote this to the client');
+		}).when({
+			name: 'Crashes On Purpose',
+			params: ['demo'],
+			fn: function(produce, input) {
+				input.crashNow(); // oops input doesn't have a crashNow function.
+				produce.done();
+			}
+		}).render({
+			params: [],
+			fn: function (writer) {
+				writer.writeBody('Never going to get here...!');
+			}
+		})
+	});
+
 	server.GET('/samples/uncaught.exception/enter').onValue(function (path) {
 		path.inject({
 			demo: 'a value'
@@ -66,6 +87,8 @@ function createRoute(server) {
 			}
 		})
 	});
+
+
 }
 
 module.exports = createRoute;
