@@ -14,21 +14,15 @@ function createRoute(server) {
 	 */
 
 	server.GET('/samples/inject').onValue(function (route) {
-		route.inject({theBus : function () {return bus;}}).when({
-			name: 'makes another bus',
-			params: [],
-			produces: ['anotherBus'],
-			fn : function(producer) {
+		route
+			.inject({theBus : function () {return bus;}})
+			.when('makes another bus', [], ['anotherBus'], function(producer) {
 				producer.value('anotherBus', new Bacon.Bus());
 				return producer.done();
-			}
-		}).render({
-			params: ['theBus'],
-			fn: function (writer, input) {
-				//input.theBus().push(12);
+			})
+			.render(['theBus'], function (writer, input) {
 				writer.writeBody('theBus() === bus: ' + (input.theBus() === bus));
-			}
-		});
+			});
 	});
 }
 

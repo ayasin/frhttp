@@ -12,31 +12,22 @@
 
 function createRoute(server) {
 	server.GET('/samples/multiply/:first/:second').onValue(function (path) {
-		path.when(
-			{
-				name: 'multiply',
+		path
+			.inject({factor: 2})
+			.when('multiply', ['request:url_vars', 'factor'], ['mul'], function (produce, input) {
+				produce.value('mul', input.first * input.second);
+				produce.done();
+			}, {
 				enter: function (input) {
 					return {
 						first: input[server.CONSTANTS.URL_VARS].first,
 						second: input[server.CONSTANTS.URL_VARS].second
 					};
-				},
-				exit: null,
-				params: ['request:url_vars', 'factor'],
-				produces: ['mul'],
-				fn: function (produce, input) {
-					produce.value('mul', input.first * input.second);
-					produce.done();
 				}
-			}
-		).inject({monkey: 'balls'}).render(
-			{
-				params: ['mul', 'factor'],
-				fn: function(writer, input) {
-					writer.writeBody('factoring in (' + input.factor + '): ' + input.mul);
-				}
-			}
-		);
+			})
+			.render(['mul', 'factor'], function(writer, input) {
+				writer.writeBody('factoring in (' + input.factor + '): ' + input.mul);
+			});
 	});
 }
 

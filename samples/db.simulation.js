@@ -9,25 +9,19 @@ function createRoute(server) {
 	 */
 
 	server.GET('/samples/db.simulation/:items').onValue(function (route) {
-		route.when({
+		route
 			/**
 			 * set up the initial values for results and last row.  We're using a 'when' instead of 'inject' because
 			 * we want these values to change.  'inject' values are constants.
 			 */
-			name: 'initially',
-			produces: ['result'],
-			fn: function(producer) {
+			.when('initially', [], ['result'], function(producer) {
 				producer.value('result', []);
 				producer.done();
-			}
-		}).when({
+			})
 			/**
 			 * Simulates a database returning 1 row at a time asynchronously (as in next(callback(row)))
 			 */
-			name: 'simulate',
-			params: [server.CONSTANTS.URL_VARS],
-			produces: ['row'],
-			fn: function(producer, input) {
+			.when('simulate', [server.CONSTANTS.URL_VARS], ['row'], function(producer, input) {
 				var maxIterations = +input[server.CONSTANTS.URL_VARS].items || 10;
 				for (var i=0; i < maxIterations+1; i++) {
 					setTimeout(_.partial(function (iteration) {
@@ -39,28 +33,20 @@ function createRoute(server) {
 						}
 					}, i), i * 10);
 				}
-			}
-		}).when({
+			})
 			/**
 			 * This is the interesting part. This merges all the results in to a single result.
 			 * Note that we avoid getting caught in a loop of 'result updated' by 'triggering on' only row
 			 */
-			name: 'merge',
-			params: ['row', 'result'],
-			// only call our fn when row changes, ignore if only results changes
-			triggerOn: ['row'],
-			produces: ['result'],
-			takeMany: true,
-			fn: function(producer, input) {
+			.when('merge',['row', 'result'],['result'],function(producer, input) {
 				producer.value('result', input.result.concat([input.row]));
 				producer.done();
-			}
-		}).render({
-			params: ['result'],
-			fn: function(writer, input) {
+			},
+			// we want to run every time only the row changes
+			{ triggerOn: ['row'], takeMany: true })
+			.render(['result'], function(writer, input) {
 				writer.writeBody(input.result);
-			}
-		});
+			});
 	});
 }
 
