@@ -1,6 +1,6 @@
 {
   "name": "frhttp",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Functional Reactive HTTP server for Node.js.  Can be used in place of or along side ExpressJS.",
   "main": "./lib/frhttp.js",
   "scripts": {
