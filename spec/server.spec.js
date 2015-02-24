@@ -30,6 +30,46 @@ describe('Server Tests', function () {
 			done();
 		})
 	});
+
+	it('should be able to create a non-rest route', function (done) {
+		server.NON_REST('/api/tester/customRender').onValue(function (route) {
+			route.when('custom render test', ['msg'], ['rmsg'], function (produce, input) {
+				produce.value('rmsg', input.msg.split('').reverse().join(''));
+				produce.done();
+			}).render(['rmsg'], function (writer, input) {
+				writer.checkVal('attached renderer says ' + input.rmsg);
+			});
+			done();
+		});
+	});
+
+	it('should be able to execute a non-rest route with a custom renderer and custom responder', function (done) {
+		var responder = {
+			error : function () {
+				expect(1).toBe(0);
+			},
+			checkVal : function (data) {
+				expect(data).toBe('custom renderer says ti tset');
+				done();
+			}
+		};
+		server.runRouteWithRender(responder, 'NON_REST', '/api/tester/customRender', {msg: 'test it'}, ['rmsg'], function (writer, input) {
+			writer.checkVal('custom renderer says ' + input.rmsg);
+		});
+	});
+
+	it('should be able to execute a non-rest route with a custom renderer and the route responder', function (done) {
+		var responder = {
+			error : function () {
+				expect(1).toBe(0);
+			},
+			checkVal : function (data) {
+				expect(data).toBe('attached renderer says ti tset');
+				done();
+			}
+		};
+		server.runRouteWithRender(responder, 'NON_REST', '/api/tester/customRender', {msg: 'test it'});
+	});
 });
 
 describe('Route descriptor and executor tests', function() {
