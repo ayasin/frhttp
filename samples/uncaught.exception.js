@@ -9,7 +9,7 @@ function createRoute(server) {
 	server.GET('/samples/uncaught.exception').onValue(function (path) {
 		path
 			.inject({demo: 'a value'})
-			.when('Crashes On Purpose', ['demo'], function(produce, input) {
+			.when('Crashes On Purpose', ['demo'], [], function(produce, input) {
 				input.crashNow(); // oops input doesn't have a crashNow function.
 				produce.done();
 			})
@@ -25,7 +25,7 @@ function createRoute(server) {
 				writer.setStatus(code);
 				writer.writeBody(code + ' : An error occurred (' + description + '), but I intercepted it and wrote this to the client');
 			})
-			.when('Crashes On Purpose', ['demo'], function(produce, input) {
+			.when('Crashes On Purpose', ['demo'], [], function(produce, input) {
 				input.crashNow(); // oops input doesn't have a crashNow function.
 				produce.done();
 			})
@@ -37,7 +37,7 @@ function createRoute(server) {
 	server.GET('/samples/uncaught.exception/enter').onValue(function (path) {
 		path
 			.inject({demo: 'a value'})
-			.when('Crashes On Purpose', ['demo'], function(produce) {
+			.when('Crashes On Purpose', ['demo'], [], function(produce) {
 				produce.done();
 			},
 			{
