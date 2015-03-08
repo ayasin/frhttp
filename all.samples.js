@@ -15,5 +15,6 @@ require('./samples/db.simulation.js')(server);
 require('./samples/uncaught.exception.js')(server);
 require('./samples/send.file.js')(server);
 require('./samples/query.string.js')(server);
+require('./samples/redirect.js')(server);
 
 server.listen(8001);
