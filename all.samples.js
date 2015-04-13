@@ -16,5 +16,6 @@ require('./samples/uncaught.exception.js')(server);
 require('./samples/send.file.js')(server);
 require('./samples/query.string.js')(server);
 require('./samples/redirect.js')(server);
+require('./samples/cookie.sample.js')(server);
 
 server.listen(8001);
