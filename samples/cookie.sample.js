@@ -10,14 +10,20 @@ function createRoute(server) {
 
 	server.GET('/samples/cookie.sample/read').onValue(function (route) {
 		route
-			.when('', [server.CONSTANTS.REQUEST], ['value'], function (emit, input) {
-				var value = input[server.CONSTANTS.REQUEST].headers.cookie;
-				emit.value('value', value);
-				emit.done();
-			})
-			.render(['value'], function (writer, input) {
-				writer.writePartial(input.value);
-				writer.done();
+			.when(server.WHEN.COOKIES)
+			.render([server.CONSTANTS.REQUEST_COOKIES], function (writer, input) {
+				writer.writeBody(input[server.CONSTANTS.REQUEST_COOKIES]);
+			});
+	});
+
+	server.GET('/samples/cookie.sample/readHeaders').onValue(function (route) {
+		route
+			.when(server.WHEN.COOKIES)
+			.when(server.WHEN.HEADERS)
+			.render([server.CONSTANTS.REQUEST_COOKIES, server.CONSTANTS.REQUEST_HEADERS], function (writer, input) {
+				var allHeaders = input[server.CONSTANTS.REQUEST_HEADERS];
+				allHeaders.cookie = input[server.CONSTANTS.REQUEST_COOKIES];
+				writer.writeBody(allHeaders);
 			});
 	});
 }
