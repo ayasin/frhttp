@@ -14,8 +14,7 @@ function createRoute(server) {
 					produce.error(500, 'Divide by 0');
 					return;
 				}
-				produce.value('div', first / second);
-				produce.done();
+				produce.finalValue('div', first / second);
 			}).
 			render(['div'], function(writer, input) {
 				writer.setHeader(server.CONSTANTS.HEADER_CONTENT_LENGTH, String(input.div).length);
